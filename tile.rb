@@ -1,3 +1,5 @@
+require_relative "board"
+
 class Tile
 
   def initialize(board)
@@ -80,6 +82,4 @@ class Tile
     end
   end
 
-
-  
 end

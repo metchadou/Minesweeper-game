@@ -54,5 +54,11 @@ class Tile
 
     ngbors
   end
+
+  def neighbors_bomb_count
+    neighbors.count {|ngbor| ngbor.bombed?}
+  end
+
+  
   
 end

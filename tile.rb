@@ -21,10 +21,14 @@ class Tile
 
   def reveal
     @revealed = true
+
+    if !neighbors_have_bomb?
+      neighbors.each {|ngbor| ngbor.reveal}
+    end
   end
 
   def flag
-    @flagged = true
+    @flagged = true unless revealed?
   end
 
   def seed_bomb
@@ -59,11 +63,11 @@ class Tile
     neighbors.count {|ngbor| ngbor.bombed?}
   end
 
-  def neighbor_bombed?
+  def neighbors_have_bomb?
     neighbors_bomb_count == 0 ? false : true
   end
 
-  
+
 
 
   

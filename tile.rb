@@ -67,7 +67,18 @@ class Tile
     neighbors_bomb_count == 0 ? false : true
   end
 
-
+  def to_s
+    case self
+    when flagged?
+      "F"
+    when bombed? && revealed?
+      "B"
+    when revealed
+      neighbors_bomb_count == 0 ? "." : "#{neighbors_bomb_count}"
+    else
+      "*"
+    end
+  end
 
 
   

@@ -59,6 +59,12 @@ class Tile
     neighbors.count {|ngbor| ngbor.bombed?}
   end
 
+  def neighbor_bombed?
+    neighbors_bomb_count == 0 ? false : true
+  end
+
   
+
+
   
 end

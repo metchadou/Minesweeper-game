@@ -31,10 +31,28 @@ class Tile
     @bombed = true
   end
 
+  def position
+    (0...@board.length).each do |row|
+      (0...@board.length).each do |col|
+        pos = [row, col]
+        return pos if @board[pos] == self
+      end
+    end
+  end
+
   def neighbors
     ngbors = []
-    deltas = [[0,1], ]
+    deltas = [[0,1], [1,0] [0,-1], [-1,0], 
+              [1,-1], [-1,1], [1,1], [-1,-1]]
 
+    deltas.each do |d|
+      x, y = position
+      ngbor_pos = [x + delta[0], y + delta[1]]
+
+      ngbors << @board[ngbor_pos] if !ngbor_pos.nil?
+    end
+
+    ngbors
   end
   
 end

@@ -38,8 +38,8 @@ class Tile
   end
 
   def position
-    (0...@board.length).each do |row|
-      (0...@board.length).each do |col|
+    (0...@board.size).each do |row|
+      (0...@board.size).each do |col|
         pos = [row, col]
         return pos if @board[pos] == self
       end

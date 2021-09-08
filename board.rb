@@ -37,6 +37,26 @@ class Board
     false
   end
 
+  def won?
+    @board.each do |row|
+      row.each do |tile|
+        return false if !tile.bombed? && !tile.revealed?
+      end
+    end
+
+    true
+  end
+
+  def lost?
+    @board.each do |row|
+      row.each do |tile|
+        return true if tile.bombed? && tile.revealed?
+      end
+    end
+
+    false
+  end
+
   def fill_board
     (0...@board.length).each do |row|
       (0...@board.length).each do |col|

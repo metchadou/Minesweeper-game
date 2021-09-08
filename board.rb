@@ -3,40 +3,62 @@ require_relative "tile"
 
 class Board
 
-  def self.grid
-    grid = Array.new(9) {Array.new(9)}
+  def initialize
+    @board = Array.new(9) {Array.new(9)}
+    fill_board
+  end
 
-    (0...grid.length).each do |row|
-      (0...grid.length).each do |col|
-        grid[row][col] = Tile.new(self)
+  def size
+    @board.length
+  end
+
+  def [](position)
+    row, col = position
+    @board[row][col]
+  end
+
+  def get_input
+    gets.chomp
+  end
+
+  def get_pos(input)
+    input.split(" ").drop(1).map(&:to_i)
+  end
+
+  def valid_input?(input)
+    input = input.split(" ")
+
+    if input.length == 3 &&
+      (input.first == "r" || input.first == "f") &&
+      input.drop(1).map(&:to_i).all? {|num| num.between?(0, @board.length-1)}
+      return true
+    end
+
+    false
+  end
+
+  def fill_board
+    (0...@board.length).each do |row|
+      (0...@board.length).each do |col|
+        @board[row][col] = Tile.new(self)
       end
     end
 
-    Board.seed_bombs(grid)
-
-    grid
+    seed_bombs
   end
 
-  def self.seed_bombs(grid)
+  def seed_bombs
     total_bombed_tiles = 0
 
     until total_bombed_tiles == 10
-      row, col = [rand(grid.length), rand(grid.length)]
-      tile = grid[row][col]
+      row, col = [rand(@board.length), rand(@board.length)]
+      tile = @board[row][col]
 
       if !tile.bombed?
         tile.seed_bomb 
         total_bombed_tiles += 1
       end
     end
-  end
-
-  def initialize
-    @grid = Board.grid
-  end
-
-  def size
-    @grid.length
   end
 
 

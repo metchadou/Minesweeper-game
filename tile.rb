@@ -1,12 +1,12 @@
+require "byebug"
 require_relative "board"
 
 class Tile
 
+  attr_reader :board
   def initialize(board)
     @board = board
-    @revealed = false
-    @flagged = false
-    @bombed = false
+    @revealed, @flagged, @bombed = false, false, false
   end
 
   def revealed?
@@ -48,12 +48,12 @@ class Tile
 
   def neighbors
     ngbors = []
-    deltas = [[0,1], [1,0] [0,-1], [-1,0], 
+    adjacent_positions = [[0,1], [1,0], [0,-1], [-1,0], 
               [1,-1], [-1,1], [1,1], [-1,-1]]
 
-    deltas.each do |d|
+    adjacent_positions.each do |adjacent_position|
       x, y = position
-      ngbor_pos = [x + delta[0], y + delta[1]]
+      ngbor_pos = [x + adjacent_position[0], y + adjacent_position[1]]
 
       ngbors << @board[ngbor_pos] if !ngbor_pos.nil?
     end
@@ -75,11 +75,16 @@ class Tile
       "F"
     when bombed? && revealed?
       "B"
-    when revealed
+    when revealed?
       neighbors_bomb_count == 0 ? "." : "#{neighbors_bomb_count}"
     else
       "*"
     end
+  end
+
+  def inspect
+    info = "@bombed: #{@bombed}, @flagged: #{@flagged}, @revealed: #{@revealed}"
+    info.inspect
   end
 
 end

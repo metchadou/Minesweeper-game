@@ -19,6 +19,10 @@ class Board
     @board[row][col]
   end
 
+  def in_board?(position)
+    position.all? {|num| num.between?(0, @board.length-1)}
+  end
+
   def get_input
     gets.chomp
   end
@@ -32,10 +36,12 @@ class Board
   end
 
   def valid_input?(input)
+    return false if input.nil?
+
     input = input.split(" ")
 
     if input.length == 3 &&
-      (input.first == "r" || input.first == "f") &&
+      ("fur".include?(input.first)) &&
       input.drop(1).map(&:to_i).all? {|num| num.between?(0, size-1)}
       return true
     end
@@ -80,13 +86,15 @@ class Board
       tile.reveal
     when "f"
       tile.flag
+    when "u"
+      tile.unflag
     end
   end
 
   def fill_board
     (0...size).each do |row|
       (0...size).each do |col|
-        @board[row][col] = Tile.new(self)
+        @board[row][col] = Tile.new(self, [row, col])
       end
     end
 

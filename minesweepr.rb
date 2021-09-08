@@ -18,12 +18,12 @@ class MineSweeper
 
   def play_turn
     @board.render
-    @board.prompt
+    prompt
     input  = nil
-    until @board.valid_input?
+    until @board.valid_input?(input)
       input = @board.get_input      
     end
-    @board.act(get_action(input), get_pos(input))
+    @board.act(@board.get_action(input), @board.get_pos(input))
   end
 
   def congrat

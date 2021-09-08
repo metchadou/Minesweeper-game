@@ -4,9 +4,10 @@ require_relative "board"
 class Tile
 
   attr_reader :board
-  def initialize(board)
+  def initialize(board, position)
     @board = board
     @revealed, @flagged, @bombed = false, false, false
+    @position = position
   end
 
   def revealed?
@@ -22,28 +23,25 @@ class Tile
   end
 
   def reveal
-    @revealed = true
+    if !revealed? && !flagged?
+      @revealed = true
 
-    if !neighbors_have_bomb?
-      neighbors.each {|ngbor| ngbor.reveal}
+      if !neighbors_have_bomb?
+        neighbors.each {|ngbor| ngbor.reveal}
+      end
     end
   end
 
   def flag
-    @flagged = true unless revealed?
+    @flagged = true unless revealed? || flagged?
+  end
+
+  def unflag
+    @flagged = false if flagged?
   end
 
   def seed_bomb
     @bombed = true
-  end
-
-  def position
-    (0...@board.size).each do |row|
-      (0...@board.size).each do |col|
-        pos = [row, col]
-        return pos if @board[pos] == self
-      end
-    end
   end
 
   def neighbors
@@ -52,10 +50,9 @@ class Tile
               [1,-1], [-1,1], [1,1], [-1,-1]]
 
     adjacent_positions.each do |adjacent_position|
-      x, y = position
+      x, y = @position
       ngbor_pos = [x + adjacent_position[0], y + adjacent_position[1]]
-
-      ngbors << @board[ngbor_pos] if !ngbor_pos.nil?
+      ngbors << @board[ngbor_pos] if @board.in_board?(ngbor_pos)
     end
 
     ngbors
@@ -82,8 +79,7 @@ class Tile
   end
 
   def inspect
-    info = "@bombed: #{@bombed}, @flagged: #{@flagged}, @revealed: #{@revealed}"
-    info.inspect
+    "@position: #{@position}, @bombed: #{@bombed}, @flagged: #{@flagged}, @revealed: #{@revealed}".inspect
   end
 
 end

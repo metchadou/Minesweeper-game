@@ -23,6 +23,10 @@ class Board
     gets.chomp
   end
 
+  def get_action(input)
+    input.split(" ").first.downcase
+  end
+
   def get_pos(input)
     input.split(" ").drop(1).map(&:to_i)
   end
@@ -65,6 +69,17 @@ class Board
     puts "  #{(0...size).to_a.join(" ")}"
     @board.each_with_index do |row, i|
       puts "#{i} #{row.join(" ")}"
+    end
+  end
+
+  def act(action, pos)
+    tile = self[pos]
+
+    case action
+    when "r"
+      tile.reveal
+    when "f"
+      tile.flag
     end
   end
 

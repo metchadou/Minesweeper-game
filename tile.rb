@@ -70,12 +70,11 @@ class Tile
   end
 
   def to_s
-    case self
-    when flagged?
+    if flagged?
       "F"
-    when bombed? && revealed?
+    elsif bombed? && revealed?
       "B"
-    when revealed?
+    elsif revealed?
       neighbors_bomb_count == 0 ? "." : "#{neighbors_bomb_count}"
     else
       "*"

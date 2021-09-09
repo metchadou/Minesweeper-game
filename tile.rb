@@ -93,7 +93,7 @@ class Tile
   end
 
   def inspect
-    "@position: #{@position}, @bombed: #{@bombed}, @flagged: #{@flagged}, @revealed: #{@revealed}".inspect
+    {position: @position, bombed: @bombed, flagged: @flagged, revealed: @revealed}.inspect
   end
 
 end

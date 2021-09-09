@@ -1,4 +1,5 @@
 require "byebug"
+require "colorize"
 require_relative "board"
 
 class Tile
@@ -62,19 +63,32 @@ class Tile
     neighbors.count {|ngbor| ngbor.bombed?}
   end
 
+  def colorized_neighbors_bomb_count
+    count = neighbors_bomb_count
+
+    case count
+    when 1
+      "#{count}".colorize(:light_blue)
+    when 2
+      "#{count}".colorize(:light_green)
+    else
+      "#{count}".colorize(:light_red)
+    end
+  end
+
   def neighbors_have_bomb?
     neighbors_bomb_count == 0 ? false : true
   end
 
   def to_s
     if flagged?
-      "F"
+      "F".colorize(:light_blue).on_light_yellow
     elsif bombed? && revealed?
-      "B"
+      "B".colorize(:black).on_light_red
     elsif revealed?
-      neighbors_bomb_count == 0 ? "." : "#{neighbors_bomb_count}"
+      neighbors_bomb_count == 0 ? "." : colorized_neighbors_bomb_count
     else
-      "*"
+      "*".colorize(:light_white)
     end
   end
 
